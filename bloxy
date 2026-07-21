@@ -34,123 +34,118 @@ local FindFirstChild, GetChildren, GetDescendants, WaitForChild, FindFirstChildW
 getgenv().ESP = {
     Settings = {
         Players = {
-            Enabled = false,
-            LocalPlayer = false,
-            TeamCheck = false,
-            Font = "Minecraftia",
-            FontSize = 7,
-            FontType = "lowercase",
+            Enabled = true,
+            LocalPlayer = true,
 
-            MaxDistance = 300,
-            RefreshRate = 99999999,
+            Font = "Tahoma",
+            FontSize = 12,
+            FontType = "lowercase", -- uppercase, lowercase, none
+
+            MaxDistance = math.huge,
+            RefreshRate = 60,
 
             BoundingBox = {
-                Enabled = false,
-                DynamicBox = true,
+                Enabled = true,
+                DynamicBox = true, -- may drop fps
                 IncludeAccessories = false,
-                Type = "2D", 
+                Type = "2D", -- 2D, Corner
                 
                 Rotation = 90,
-                Color = {
-                    Color3_fromRGB(255, 255, 255),   -- White on top
-                    Color3_fromRGB(47, 78, 124)     -- Accent on bottom
-                },
+                Color = {Color3_fromRGB(216, 126, 157), Color3_fromRGB(216, 126, 157)},
                 Transparency = {0, 0},
 
                 Glow = {
-                    Enabled = true,
+                    Enabled = false,
                     Rotation = 90,
-                    Color = {
-                        Color3_fromRGB(47, 78, 124), 
-                        Color3_fromRGB(47, 78, 124)
-                    },
+                    Color = {Color3_fromRGB(216, 126, 157), Color3_fromRGB(216, 126, 157)},
                     Transparency = {0.75, 0.75},
                 },
 
                 Fill = {
                     Enabled = true,
                     Rotation = 90,
-                    Color = {
-                        Color3_fromRGB(47, 78, 124), 
-                        Color3_fromRGB(0, 0, 0)
-                    },
-                    Transparency = {0.6, 0.6},
+                    Color = {Color3_fromRGB(216, 126, 157), Color3_fromRGB(216, 126, 157)},
+                    Transparency = {1, 0.5},
                 },
             },
 
             Bars = {
                 HealthBar = {
-                    Enabled = false,
+                    Enabled = true,
                     Position = "Left",
-                    Color = {
-                        Color3_fromRGB(47, 78, 124),   -- High Health (Top of bar)
-                        Color3_fromRGB(90, 108, 198),   -- Medium Health
-                        Color3_fromRGB(0, 0, 0)         -- Low Health (Bottom of bar)
-                    },
+                    Color = {Color3_fromRGB(131, 245, 78), Color3_fromRGB(255, 255, 0), Color3_fromRGB(252, 71, 77)},
 
                     Type = function(Player, CharacterObjects)
                         if not IsA(Player, "Player") then return end
+
                         local Humanoid = CharacterObjects.Humanoid
                         if not Humanoid then return end
-                        return Humanoid.Health / Humanoid.MaxHealth
+
+                        return Humanoid.Health / Humanoid.MaxHealth -- what value the bar follows
                     end,
 
                     Text = {
-                        Enabled = false,
+                        Enabled = true,
                         FollowBar = true,
                         Ending = "",
-                        Position = "Left",
-                        Color = Color3_fromRGB(255, 255, 255),
-                        Transparency = 0.2,
-
-                        Type = function(Player, CharacterObjects)
-                            if not IsA(Player, "Player") then return end
-                            local Humanoid = CharacterObjects.Humanoid
-                            if not Humanoid then return end
-                            return Humanoid.Health, Humanoid.Health ~= Humanoid.MaxHealth
-                        end,
-                    },
-                },
-
-                ArmorBar = {
-                    Enabled = false,
-                    Position = "Bottom",
-                    Color = {Color3_fromRGB(52, 131, 235), Color3_fromRGB(52, 131, 235), Color3_fromRGB(52, 131, 235)},
-
-                    Type = function(Player, CharacterObjects)
-                        if not IsA(Player, "Player") then return end
-                        local Humanoid = CharacterObjects.Humanoid
-                        if not Humanoid then return end
-                        return Humanoid.Health / Humanoid.MaxHealth
-                    end,
-
-                    Text = {
-                        Enabled = false,
-                        FollowBar = true,
-                        Ending = "",
-                        Position = "Left",
+                        Position = "Left", -- // will ignore if FollowBar is true
                         Color = Color3_fromRGB(255, 255, 255),
                         Transparency = 0,
 
                         Type = function(Player, CharacterObjects)
                             if not IsA(Player, "Player") then return end
+
                             local Humanoid = CharacterObjects.Humanoid
                             if not Humanoid then return end
-                            return Humanoid.Health, Humanoid.Health ~= Humanoid.MaxHealth
+
+                            return Humanoid.Health, Humanoid.Health ~= Humanoid.MaxHealth -- Value the text follows, Value the text turns visible if follow bar is on
+                        end,
+                    },
+                },
+
+                ArmorBar = {
+                    Enabled = true,
+                    Position = "Bottom",
+                    Color = {Color3_fromRGB(52, 131, 235), Color3_fromRGB(52, 131, 235), Color3_fromRGB(52, 131, 235)},
+
+                    Type = function(Player, CharacterObjects)
+                        if not IsA(Player, "Player") then return end
+
+                        local Humanoid = CharacterObjects.Humanoid
+                            if not Humanoid then return end
+
+                        return Humanoid.Health / Humanoid.MaxHealth -- what value the bar follows
+                    end,
+
+                    Text = {
+                        Enabled = true,
+                        FollowBar = true,
+                        Ending = "%",
+                        Position = "Left", -- // will ignore if FollowBar is true
+                        Color = Color3_fromRGB(255, 255, 255),
+                        Transparency = 0,
+
+                        Type = function(Player, CharacterObjects)
+                            if not IsA(Player, "Player") then return end
+
+                            local Humanoid = CharacterObjects.Humanoid
+                            if not Humanoid then return end
+
+                            return Humanoid.Health, Humanoid.Health ~= Humanoid.MaxHealth -- value the text follows, value the text turns visible if follow bar is on
                         end,
                     },
                 },
             },
 
             Chams = {
-                Enabled = false,
+                Enabled = true,
                 DepthMode = Enum.HighlightDepthMode.AlwaysOnTop,
-                Fill = {Color3_fromRGB(90, 108, 198), 0.9},
-                Outline = {Color3_fromRGB(0, 0, 0), 0.4},
+                Fill = {Color3_fromRGB(216, 126, 157), 0.5},
+                Outline = {Color3_fromRGB(0, 0, 0), 0.5},
             },
 
             Name = {
-                Enabled = false,
+                Enabled = true,
                 UseDisplay = true,
                 Position = "Top",
                 Color = Color3_fromRGB(255, 255, 255),
@@ -158,41 +153,43 @@ getgenv().ESP = {
             },
 
             Distance = {
-                Enabled = false,
-                Ending = "m",
+                Enabled = true,
+                Ending = "st",
                 Position = "Bottom",
                 Color = Color3_fromRGB(255, 255, 255),
                 Transparency = 0,
             },
 
             Weapon = {
-                Enabled = false,
+                Enabled = true,
                 Position = "Bottom",
                 Color = Color3_fromRGB(255, 255, 255),
                 Transparency = 0,
             },
 
             Flags = {
-                Enabled = false,
+                Enabled = true,
                 Position = "Right",
                 Color = Color3_fromRGB(255, 255, 255),
                 Transparency = 0,
 
                 Type = function(Player, CharacterObjects)
                     local Flags = {}
+
                     if not IsA(Player, "Player") then return Flags end
 
                     local Humanoid = CharacterObjects.Humanoid
-                    if not Humanoid then return Flags end
+                    if not Humanoid then return end
 
                     if Humanoid.MoveDirection.Magnitude > 0 then
                         table_insert(Flags, "moving")
                     end
+
                     if Humanoid.Jump then
                         table_insert(Flags, "jumping")
                     end
 
-                    return Flags
+                    return Flags -- return a table for it to work
                 end
             },
         },
@@ -731,6 +728,19 @@ do -- Functions
                 end
 
                 LastTick = os_clock()
+                local ESPFontSize = ESPSettings.FontSize
+                local ESPFont = Fonts.Loaded[ESPSettings.Font]
+
+                -- Update all text objects with current font/size
+                for _, TextName in {"TargetName","Distance","Flags","Weapon"} do
+                    local txt = Objects[TextName]
+                    if txt then txt.TextSize = ESPFontSize; txt.FontFace = ESPFont end
+                end
+                for BarName, _ in ESPSettings.Bars do
+                    local bartxt = Objects[BarName .. "Text"]
+                    if bartxt then bartxt.TextSize = ESPFontSize; bartxt.FontFace = ESPFont end
+                end
+
                 Objects["TargetHolder"].Visible = false
                 Objects["Highlight"].Enabled = false
 
@@ -825,6 +835,10 @@ do -- Functions
                                 BoxFillGradient.Transparency = NumberSequence_new{NumberSequenceKeypoint_new(0, BoxFillTransparency[1]), NumberSequenceKeypoint_new(1, BoxFillTransparency[2])}
                             end
                         else
+                            BoxOutline.Parent.Visible = false
+                            BoxInline.Parent.Visible = false
+                            BoxFill.Visible = false
+
                             local CornerHolder = Objects["CornerHolder"]; do
                                 CornerHolder.Visible = true
                                 CornerHolder.Size = UDim2_fromOffset(BoxWidth + 2, BoxHeight + 2)
